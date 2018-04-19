@@ -8,10 +8,17 @@ import { CardSection } from './common';
 
 class ListItem extends Component {
 
+  renderDescription() {
+    const { library, expend } = this.props;
+    if (expend) {
+      return (
+        <Text>{library.description}</Text>
+      )
+    }
+  }
   render() {
     const { id, title, description } = this.props.library;
     const { titleStyle } = styles;
-    console.log(this.props)
     return (
       <TouchableWithoutFeedback
         onPress={() => this.props.selectLibrary(id)}
@@ -22,6 +29,7 @@ class ListItem extends Component {
               {title}
             </Text>
           </CardSection>
+          {this.renderDescription()}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -35,4 +43,9 @@ const styles = {
   }
 }
 
-export default connect(null, actions)(ListItem);
+const mapStateToProps = (state, ownProps) => {
+  const expend = state.selectedLibraryId === ownProps.library.id
+  return { expend }
+}
+
+export default connect(mapStateToProps, actions)(ListItem);
